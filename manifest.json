@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Salesforce Field Finder",
+  "name": "Salesforce Helper",
   "version": "1.0.0",
   "description": "Streamline Salesforce development with ID-based navigation and intelligent formula beautification.",
   "permissions": [
@@ -33,4 +33,5 @@
   "background": {
     "service_worker": "background.js"
   }
+
 }
