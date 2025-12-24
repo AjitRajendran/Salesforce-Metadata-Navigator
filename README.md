@@ -26,3 +26,26 @@ Navigate the history of your automation without leaving your current tab.
 
 ## 📈 Impact on Productivity
 Salesforce Helper is designed to reduce metadata navigation time by up to 50%, allowing Admins to focus on solving business problems rather than searching for technical details.
+
+## 🚀 How to Install & Use
+
+Since this is a developer-focused toolkit, you can install it manually in seconds:
+
+1. **Download the Code:** Click the green `Code` button above and select `Download ZIP`, then extract it to a folder on your computer.
+2. **Open Chrome Extensions:** In your browser, go to `chrome://extensions/`.
+3. **Enable Developer Mode:** Toggle the switch in the top-right corner to **On**.
+4. **Load the Tool:** Click the `Load unpacked` button and select the folder where you extracted the files.
+5. **Connect:** Open any Salesforce tab, click the **Salesforce Helper** icon in your toolbar, and start saving time!
+
+---
+
+## 📖 User Guide
+
+### 1. Beautifying Formulas
+Copy any complex Salesforce formula and paste it into the **Beautifier** tab. The tool will instantly restructure the logic. Click **Copy Formatted Formula** to paste it back into Salesforce.
+
+### 2. Finding Fields
+Select an Object from the dropdown. Use the filter bar to find specific fields. Click the field label to jump directly to that field's setup page in Salesforce.
+
+### 3. Managing Flows
+In the **Flows** tab, search for any Flow by name. You will see a list of all versions. Active versions are highlighted in green for quick identification.
