@@ -1,8 +1,8 @@
-# Salesforce Helper
+# Salesforce Metadata Navigator
 **The Productivity Power-House for Salesforce Admins and Architects.**
 
 ## 🚀 Mission
-Salesforce Helper was developed to eliminate the "administrative friction" inherent in managing complex Salesforce orgs. By bridging the gap between the standard Salesforce UI and the Tooling API, this extension empowers Admins to audit, debug, and navigate metadata with unprecedented speed.
+Salesforce Metadata Navigator was developed to eliminate the "administrative friction" inherent in managing complex Salesforce orgs. By bridging the gap between the standard Salesforce UI and the Tooling API, this extension empowers Admins to audit, debug, and navigate metadata with unprecedented speed.
 
 ## 🛠 Key Features
 
@@ -25,12 +25,12 @@ Navigate the history of your automation without leaving your current tab.
 * **Direct Access:** Open specific historical versions in the Flow Builder instantly.
 
  ### 4. Direct Export to Salesforce Inspector
-Salesforce Helper acts as a precursor to data queries. 
+Salesforce Metadata Navigator acts as a precursor to data queries. 
 * **Seamless Integration:** Select multiple fields within the Field Finder and click the "Export - Salesforce Inspector" button.
 * **Auto-Query Generation:** The tool automatically constructs a valid SOQL query and injects it directly into the Salesforce Inspector Data Export page, saving the manual effort of typing field API names.
 
 ## 📈 Impact on Productivity
-Salesforce Helper is designed to reduce metadata navigation time by up to 50%, allowing Admins to focus on solving business problems rather than searching for technical details.
+Salesforce Metadata Navigator is designed to reduce metadata navigation time by up to 50%, allowing Admins to focus on solving business problems rather than searching for technical details.
 
 ## 🚀 How to Install & Use
 
@@ -40,7 +40,7 @@ Since this is a developer-focused toolkit, you can install it manually in second
 2. **Open Chrome Extensions:** In your browser, go to `chrome://extensions/`.
 3. **Enable Developer Mode:** Toggle the switch in the top-right corner to **On**.
 4. **Load the Tool:** Click the `Load unpacked` button and select the folder where you extracted the files.
-5. **Connect:** Open any Salesforce tab, click the **Salesforce Helper** icon in your toolbar, and start saving time!
+5. **Connect:** Open any Salesforce tab, click the **Salesforce Metadata Navigator** icon in your toolbar, and start saving time!
 
 ---
 
