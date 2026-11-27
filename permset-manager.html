@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Access Management — Salesforce Metadata Navigator</title>
+  <link rel="stylesheet" href="permset-manager.css" />
+</head>
+<body>
+
+  <!-- Loading Overlay -->
+  <div class="psm-loading-overlay" id="loadingOverlay">
+    <div class="psm-spinner"></div>
+    <div class="psm-loading-label" id="loadingLabel">Connecting to Salesforce…</div>
+  </div>
+
+  <div class="psm-page">
+
+    <!-- App Bar -->
+    <header class="psm-appbar">
+      <div class="psm-appbar-logo">
+        <img src="icons/48.png" alt="" />
+        <span class="psm-appbar-heading">
+          <span class="psm-appbar-kicker">Metadata Navigator</span>
+          <span class="psm-appbar-title">Access Studio</span>
+        </span>
+      </div>
+      <div class="psm-appbar-spacer"></div>
+      <div class="psm-appbar-context">
+        <span class="psm-appbar-user" id="userContext"></span>
+        <span class="psm-appbar-org" id="orgContext"></span>
+      </div>
+      <div class="psm-appbar-actions">
+        <button id="btnExportCsv"    class="psm-btn psm-btn-secondary" disabled>Export Workbook</button>
+        <button id="btnEditMode"     class="psm-btn psm-btn-secondary" disabled>Edit</button>
+        <button id="btnApplyChanges" class="psm-btn psm-btn-success"   disabled>Save</button>
+        <button id="btnCancelEdit"   class="psm-btn psm-btn-ghost"     disabled>Cancel</button>
+          <button id="btnClearPending" class="psm-btn psm-btn-ghost"     disabled>Clear Pending</button>
+        <button id="btnResetCompare" class="psm-btn psm-btn-danger"    disabled>New Compare</button>
+      </div>
+    </header>
+
+    <!-- Status Banner -->
+    <div id="statusBanner" class="psm-status info" style="margin-top:10px;"></div>
+    <div id="psgRestrictionNotice" class="psm-notice psm-hidden"></div>
+
+    <nav class="psm-workspace-nav" aria-label="Access Studio workspace">
+      <button id="btnWorkspaceCompare" class="psm-workspace-tab active" type="button">Profiles &amp; Permission Sets</button>
+      <button id="btnWorkspaceGroups" class="psm-workspace-tab" type="button">Public Groups</button>
+      <button id="btnWorkspaceQueues" class="psm-workspace-tab" type="button">Queues</button>
+      <button id="btnWorkspaceDependencies" class="psm-workspace-tab" type="button">Field Dependencies</button>
+    </nav>
+
+    <section id="dependenciesPanel" class="psm-dependencies-panel psm-hidden" aria-label="Field dependencies">
+      <div class="psm-dependencies-heading">
+        <h2>Field Dependencies</h2>
+        <button id="btnExportDependencies" class="psm-btn psm-btn-secondary" type="button" disabled>Export CSV</button>
+      </div>
+      <div class="psm-dependencies-controls">
+        <label for="dependencyObject">Object</label>
+        <select id="dependencyObject"><option value="">Select an object</option></select>
+        <label for="dependencyField">Field</label>
+        <select id="dependencyField" disabled><option value="">Select a field</option></select>
+      </div>
+      <p class="psm-dependencies-note">Shows references reported by Salesforce MetadataComponentDependency for custom fields. This is not a complete deletion audit: review dynamic references, code, integrations, and unsupported metadata separately.</p>
+      <nav id="dependencyTabs" class="psm-dependency-tabs" aria-label="Component types"></nav>
+      <div id="dependencyResults" aria-live="polite">Select an object and field to inspect references.</div>
+    </section>
+
+    <div id="saveSummaryModal" class="psm-modal-overlay psm-hidden" role="dialog" aria-modal="true" aria-labelledby="saveSummaryTitle">
+      <div class="psm-modal">
+        <div class="psm-modal-header">
+          <div id="saveSummaryTitle" class="psm-modal-title">Saved Updates</div>
+          <button id="btnCloseSaveSummary" type="button" class="psm-modal-close" aria-label="Close saved updates summary">×</button>
+        </div>
+        <div id="saveSummaryPanel" class="psm-save-summary"></div>
+      </div>
+    </div>
+
+    <div id="savePreviewModal" class="psm-modal-overlay psm-hidden" role="dialog" aria-modal="true" aria-labelledby="savePreviewTitle">
+      <div class="psm-modal">
+        <div class="psm-modal-header">
+          <div id="savePreviewTitle" class="psm-modal-title">Review Pending Changes</div>
+          <button id="btnCloseSavePreview" type="button" class="psm-modal-close" aria-label="Close save preview">×</button>
+        </div>
+        <div id="savePreviewPanel" class="psm-save-preview"></div>
+        <div class="psm-modal-footer">
+          <button id="btnCancelSavePreview" type="button" class="psm-btn psm-btn-ghost">Cancel</button>
+          <button id="btnConfirmSavePreview" type="button" class="psm-btn psm-btn-success">Confirm Save</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Picker Panel -->
+    <section class="psm-picker-panel" id="pickerPanel">
+      <div class="psm-picker-heading">
+        <div>
+          <div class="psm-picker-eyebrow">Comparison workspace</div>
+          <div class="psm-picker-panel-title">Choose access sources</div>
+          <div class="psm-picker-hint">Inspect one source or compare up to four profiles and permission sets.</div>
+        </div>
+        <div class="psm-picker-actions psm-picker-actions-top">
+          <button id="btnOpenInline" class="psm-btn psm-btn-secondary" disabled>Open And Edit</button>
+          <button id="btnCompareInline" class="psm-btn psm-btn-primary psm-hidden" disabled>Compare Selected</button>
+        </div>
+      </div>
+      <div class="psm-preset-workspace">
+        <div class="psm-preset-row">
+          <select id="presetSelect" aria-label="Saved compare presets">
+            <option value="">Saved compare presets…</option>
+          </select>
+          <button id="btnApplyPreset" class="psm-btn psm-btn-secondary" type="button" disabled>Apply Preset</button>
+          <button id="btnDeletePreset" class="psm-btn psm-btn-ghost" type="button" disabled>Delete</button>
+        </div>
+        <div class="psm-preset-row">
+          <input id="presetName" type="text" placeholder="Name this selection" maxlength="60" aria-label="Preset name" />
+          <button id="btnSavePreset" class="psm-btn psm-btn-secondary" type="button" disabled>Save Selection</button>
+        </div>
+      </div>
+      <div class="psm-picker-grid">
+        <div class="psm-picker">
+          <div class="psm-picker-label-row">
+            <label for="permSet1">Selection 1</label>
+            <a id="permSet1Link" class="psm-picker-link psm-hidden" href="#">Open in Setup</a>
+          </div>
+          <input id="permSet1" list="permSetOptionsList" placeholder="Type to search…" autocomplete="off" />
+        </div>
+        <div class="psm-picker">
+          <div class="psm-picker-label-row">
+            <label for="permSet2">Selection 2</label>
+            <a id="permSet2Link" class="psm-picker-link psm-hidden" href="#">Open in Setup</a>
+          </div>
+          <input id="permSet2" list="permSetOptionsList" placeholder="Enable by selecting item 1" autocomplete="off" disabled />
+        </div>
+        <div class="psm-picker">
+          <div class="psm-picker-label-row">
+            <label for="permSet3">Selection 3 (optional)</label>
+            <a id="permSet3Link" class="psm-picker-link psm-hidden" href="#">Open in Setup</a>
+          </div>
+          <input id="permSet3" list="permSetOptionsList" placeholder="Enable by selecting item 2" autocomplete="off" disabled />
+        </div>
+        <div class="psm-picker">
+          <div class="psm-picker-label-row">
+            <label for="permSet4">Selection 4 (optional)</label>
+            <a id="permSet4Link" class="psm-picker-link psm-hidden" href="#">Open in Setup</a>
+          </div>
+          <input id="permSet4" list="permSetOptionsList" placeholder="Enable by selecting item 3" autocomplete="off" disabled />
+        </div>
+      </div>
+      <datalist id="permSetOptionsList"></datalist>
+    </section>
+
+    <section id="directoryPanel" class="psm-directory-panel psm-hidden">
+      <aside class="psm-directory-sidebar">
+        <div class="psm-directory-sidebar-head">
+          <div>
+            <div id="directoryEyebrow" class="psm-picker-eyebrow">Org access</div>
+            <h2 id="directoryTitle">Public Groups</h2>
+          </div>
+          <button id="btnRefreshDirectory" class="psm-btn psm-btn-ghost" type="button">Refresh</button>
+        </div>
+        <input id="directoryFilter" class="psm-directory-filter" type="search" placeholder="Filter groups..." />
+        <div id="directoryList" class="psm-directory-list"></div>
+      </aside>
+
+      <div class="psm-directory-detail">
+        <div id="directoryEmpty" class="psm-directory-empty">
+          <strong>Select an item</strong>
+          <span>Choose a group or queue to review and manage its access.</span>
+        </div>
+        <div id="directoryEditor" class="psm-hidden">
+          <div class="psm-directory-detail-head">
+            <div>
+              <span id="directoryTypeBadge" class="psm-directory-badge"></span>
+              <h2 id="directoryItemName"></h2>
+              <div id="directoryItemApiName" class="psm-directory-api-name"></div>
+              <a id="directorySetupLink" class="psm-directory-setup-link" href="#" target="_blank" rel="noopener noreferrer">Open in Setup</a>
+            </div>
+            <span id="directoryMemberCount" class="psm-directory-count"></span>
+          </div>
+
+          <section class="psm-directory-section">
+            <div class="psm-directory-section-head">
+              <div>
+                <h3>Members</h3>
+                <p>Users and nested groups that receive access through this group.</p>
+              </div>
+            </div>
+            <div class="psm-directory-add-row">
+              <input id="directoryMemberSearch" list="directoryMemberOptions" placeholder="Search users or groups..." autocomplete="off" />
+              <datalist id="directoryMemberOptions"></datalist>
+              <button id="btnAddDirectoryMember" class="psm-btn psm-btn-primary" type="button" disabled>Add Member</button>
+            </div>
+            <div class="psm-table-wrap psm-directory-table-wrap">
+              <table>
+                <thead><tr><th>Member</th><th>Type</th><th aria-label="Actions"></th></tr></thead>
+                <tbody id="directoryMembersBody"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="queueObjectsSection" class="psm-directory-section psm-hidden">
+            <div class="psm-directory-section-head">
+              <div>
+                <h3>Supported Objects</h3>
+                <p>Records of these object types can be owned by this queue.</p>
+              </div>
+            </div>
+            <div class="psm-directory-add-row">
+              <input id="queueObjectSearch" list="queueObjectOptions" placeholder="Search queueable objects..." autocomplete="off" />
+              <datalist id="queueObjectOptions"></datalist>
+              <button id="btnAddQueueObject" class="psm-btn psm-btn-primary" type="button" disabled>Add Object</button>
+            </div>
+            <div id="queueObjectsList" class="psm-directory-tags"></div>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <!-- Summary Bar -->
+    <div class="psm-summary-bar psm-hidden" id="summaryBar"></div>
+    <div class="psm-compare-context psm-hidden" id="compareContext"></div>
+
+    <!-- Tab Bar -->
+    <nav class="psm-tabs-bar psm-hidden" id="tabsBar">
+      <button class="psm-tab active" data-target="objectTab">Object Permissions <span class="tab-count" id="cnt-object">0</span></button>
+      <button class="psm-tab" data-target="fieldTab">Field Permissions <span class="tab-count" id="cnt-field">0</span></button>
+      <button class="psm-tab" data-target="appPermissionsTab">App Permissions <span class="tab-count" id="cnt-apppermissions">0</span></button>
+      <button class="psm-tab" data-target="systemTab">System Permissions <span class="tab-count" id="cnt-system">0</span></button>
+      <button class="psm-tab" data-target="apexClassTab">Apex Classes <span class="tab-count" id="cnt-apex">0</span></button>
+      <button class="psm-tab" data-target="visualforceTab">Visualforce <span class="tab-count" id="cnt-vf">0</span></button>
+      <button class="psm-tab" data-target="customPermissionTab">Custom Permissions <span class="tab-count" id="cnt-custperm">0</span></button>
+      <button class="psm-tab" data-target="connectedAppsTab">Assigned Connected Apps <span class="tab-count" id="cnt-connectedapps">0</span></button>
+      <button class="psm-tab" data-target="flowAccessTab">Flow Access <span class="tab-count" id="cnt-flow">0</span></button>
+      <button class="psm-tab" data-target="assignedAppsTab">Assigned Apps <span class="tab-count" id="cnt-assignedapps">0</span></button>
+      <button class="psm-tab" data-target="setupAccessTab">Other Setup Access <span class="tab-count" id="cnt-setupaccess">0</span></button>
+      <button class="psm-tab" data-target="changesTab">Pending Changes <span class="tab-count" id="cnt-changes">0</span></button>
+    </nav>
+
+    <!-- Comparison Content -->
+    <section class="psm-content psm-hidden" id="comparisonPanel">
+
+      <div id="objectTab" class="psm-view active">
+        <div class="psm-filter-row psm-filter-row-actions"><input id="objectFilter" placeholder="Filter object permissions..." /><label class="psm-filter-toggle"><input id="objectDiffOnly" type="checkbox" /> Show only differences</label></div>
+        <div class="psm-add-row psm-hidden" id="objectAddRow">
+          <input id="objectAddSearch" list="objectCatalogList" placeholder="Search object to add…" autocomplete="off" />
+          <button id="btnAddObject" class="psm-btn psm-btn-secondary" disabled>Add Object</button>
+        </div>
+        <div class="psm-table-wrap"><table id="objectTable"></table></div>
+      </div>
+
+      <div id="fieldTab" class="psm-view">
+        <div class="psm-filter-row psm-filter-row-actions">
+          <input id="fieldFilter" placeholder="Filter by object or field name…" />
+          <label class="psm-filter-toggle"><input id="fieldDiffOnly" type="checkbox" /> Show only differences</label>
+          <button id="btnCollapseFields" class="psm-btn psm-btn-secondary" type="button">Collapse All</button>
+        </div>
+        <div class="psm-add-row" id="fieldObjectAddRow">
+          <input id="fieldObjectAddSearch" list="objectCatalogList" placeholder="Search object to load fields…" autocomplete="off" />
+          <button id="btnAddFieldObject" class="psm-btn psm-btn-secondary" disabled>Load Fields</button>
+        </div>
+        <div class="psm-table-wrap"><table id="fieldTable"></table></div>
+      </div>
+
+      <div id="appPermissionsTab" class="psm-view">
+        <div class="psm-filter-row psm-filter-row-actions"><input id="appPermissionsFilter" placeholder="Filter app permissions..." /><label class="psm-filter-toggle"><input id="appPermissionsDiffOnly" type="checkbox" /> Show only differences</label></div>
+        <div class="psm-table-wrap"><table id="appPermissionsTable"></table></div>
+      </div>
+
+      <div id="systemTab" class="psm-view">
+        <div class="psm-filter-row psm-filter-row-actions"><input id="systemFilter" placeholder="Filter system permissions..." /><label class="psm-filter-toggle"><input id="systemDiffOnly" type="checkbox" /> Show only differences</label></div>
+        <div class="psm-table-wrap"><table id="systemTable"></table></div>
+      </div>
+
+      <div id="apexClassTab" class="psm-view">
+        <div class="psm-filter-row psm-filter-row-actions"><input id="apexFilter" placeholder="Filter Apex classes…" /><label class="psm-filter-toggle"><input id="apexDiffOnly" type="checkbox" /> Show only differences</label></div>
+        <div class="psm-add-row psm-hidden" id="apexAddRow">
+          <input id="apexAddSearch" list="apexOptionsList" placeholder="Search Apex class to add…" autocomplete="off" />
+          <button id="btnAddApex" class="psm-btn psm-btn-secondary" disabled>Add Apex Class</button>
+        </div>
+        <div class="psm-table-wrap"><table id="apexClassTable"></table></div>
+      </div>
+
+      <div id="visualforceTab" class="psm-view">
+        <div class="psm-filter-row psm-filter-row-actions"><input id="vfFilter" placeholder="Filter Visualforce pages…" /><label class="psm-filter-toggle"><input id="vfDiffOnly" type="checkbox" /> Show only differences</label></div>
+        <div class="psm-add-row psm-hidden" id="vfAddRow">
+          <input id="vfAddSearch" list="vfOptionsList" placeholder="Search Visualforce page to add…" autocomplete="off" />
+          <button id="btnAddVf" class="psm-btn psm-btn-secondary" disabled>Add Visualforce</button>
+        </div>
+        <div class="psm-table-wrap"><table id="visualforceTable"></table></div>
+      </div>
+
+      <div id="customPermissionTab" class="psm-view">
+        <div class="psm-filter-row psm-filter-row-actions"><input id="custPermFilter" placeholder="Filter custom permissions…" /><label class="psm-filter-toggle"><input id="custPermDiffOnly" type="checkbox" /> Show only differences</label></div>
+        <div class="psm-add-row psm-hidden" id="custPermAddRow">
+          <input id="custPermAddSearch" list="custPermOptionsList" placeholder="Search custom permission to add…" autocomplete="off" />
+          <button id="btnAddCustPerm" class="psm-btn psm-btn-secondary" disabled>Add Custom Permission</button>
+        </div>
+        <div class="psm-table-wrap"><table id="customPermissionTable"></table></div>
+      </div>
+
+      <div id="connectedAppsTab" class="psm-view">
+        <div class="psm-filter-row psm-filter-row-actions"><input id="connectedAppsFilter" placeholder="Filter connected apps…" /><label class="psm-filter-toggle"><input id="connectedAppsDiffOnly" type="checkbox" /> Show only differences</label></div>
+        <div class="psm-add-row psm-hidden" id="connectedAppsAddRow">
+          <input id="connectedAppsAddSearch" list="connectedAppsOptionsList" placeholder="Search connected app to add…" autocomplete="off" />
+          <button id="btnAddConnectedApp" class="psm-btn psm-btn-secondary" disabled>Add Connected App</button>
+        </div>
+        <div class="psm-table-wrap"><table id="connectedAppsTable"></table></div>
+      </div>
+
+      <div id="flowAccessTab" class="psm-view">
+        <div class="psm-filter-row psm-filter-row-actions">
+          <input id="flowFilter" placeholder="Filter flow access…" />
+          <label class="psm-filter-toggle"><input id="flowDiffOnly" type="checkbox" /> Show only differences</label>
+        </div>
+        <div class="psm-table-wrap"><table id="flowAccessTable"></table></div>
+      </div>
+
+      <div id="assignedAppsTab" class="psm-view">
+        <div class="psm-filter-row psm-filter-row-actions">
+          <input id="assignedAppsFilter" placeholder="Filter assigned apps…" />
+          <label class="psm-filter-toggle"><input id="assignedAppsDiffOnly" type="checkbox" /> Show only differences</label>
+        </div>
+        <div class="psm-table-wrap"><table id="assignedAppsTable"></table></div>
+      </div>
+
+      <div id="setupAccessTab" class="psm-view">
+        <div class="psm-filter-row psm-filter-row-actions">
+          <input id="setupFilter" placeholder="Filter other setup access…" />
+          <label class="psm-filter-toggle"><input id="setupDiffOnly" type="checkbox" /> Show only differences</label>
+        </div>
+        <div class="psm-table-wrap"><table id="setupAccessTable"></table></div>
+      </div>
+
+      <div id="changesTab" class="psm-view">
+        <div class="psm-filter-row"><input id="changesFilter" placeholder="Filter pending changes..." /></div>
+        <div class="psm-table-wrap"><table id="changesTable"></table></div>
+      </div>
+
+    </section>
+  </div>
+
+  <datalist id="objectCatalogList"></datalist>
+  <datalist id="apexOptionsList"></datalist>
+  <datalist id="vfOptionsList"></datalist>
+  <datalist id="custPermOptionsList"></datalist>
+  <datalist id="connectedAppsOptionsList"></datalist>
+
+  <script src="permset-api.js"></script>
+  <script src="permset-diff.js"></script>
+  <script src="permset-field-rules.js"></script>
+  <script src="permset-manager.js"></script>
+</body>
+</html>

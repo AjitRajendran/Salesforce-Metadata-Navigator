@@ -1,0 +1,181 @@
+:root {
+    color-scheme: light;
+    font-family: "Segoe UI", system-ui, sans-serif;
+    color: #172f49;
+    background: #eef4fa;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+body {
+    margin: 0;
+    min-width: 320px;
+    background: linear-gradient(160deg, #e5f3fc 0, #f3f6fb 360px, #eef3f8 100%);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+main {
+    max-width: 1320px;
+    margin: 32px auto;
+    padding: 0 24px 32px;
+}
+
+.page-header {
+    position: relative;
+    overflow: hidden;
+    padding: 28px 34px 32px;
+    border-radius: 16px 16px 0 0;
+    background: linear-gradient(110deg, #073661 0%, #07569a 55%, #007d98 100%);
+    color: #fff;
+}
+
+.page-header::after {
+    position: absolute;
+    right: -80px;
+    bottom: -180px;
+    width: 360px;
+    height: 360px;
+    border: 45px solid rgba(255, 255, 255, .08);
+    border-radius: 50%;
+    content: "";
+    pointer-events: none;
+}
+
+.page-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #e0f2ff;
+}
+
+.page-brand img {
+    flex: none;
+    padding: 4px;
+    border-radius: 10px;
+    background: #fff;
+}
+
+.page-eyebrow, .section-eyebrow {
+    margin: 0 0 5px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+}
+.page-eyebrow { color: #b5edee; }
+.section-eyebrow { color: #087c86; }
+h1 { margin: 0; font-size: 30px; line-height: 1.2; letter-spacing: -.025em; }
+.record-details { margin: 12px 0 0; font-weight: 600; overflow-wrap: anywhere; }
+.record-details:not(:empty) {
+    display: inline-block;
+    padding: 5px 11px;
+    border: 1px solid rgba(255, 255, 255, .35);
+    border-radius: 6px;
+    background: rgba(0, 29, 61, .24);
+}
+.header-description { position: relative; max-width: 720px; margin: 12px 0 0; color: #e1f1fc; }
+
+.workspace {
+    padding: 28px 34px 34px;
+    border: 1px solid #d5e1ec;
+    border-top: 0;
+    border-radius: 0 0 16px 16px;
+    background: #fff;
+    box-shadow: 0 12px 32px rgba(20, 54, 91, .08);
+}
+.workspace-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+.workspace-heading h2 { margin: 0; font-size: 20px; letter-spacing: -.015em; }
+.field-count {
+    margin: 0;
+    padding: 5px 11px;
+    border: 1px solid #c9e8e4;
+    border-radius: 999px;
+    background: #ebf8f6;
+    color: #0c625d;
+    font-size: 12px;
+    font-weight: 600;
+}
+#status.error { border-color: #efb4b1; background: #fff1f0; color: #8e030f; }
+.filter-group { margin-top: 22px; }
+label { display: block; margin-bottom: 6px; color: #304c68; font-size: 13px; font-weight: 600; }
+input, textarea, select {
+    max-width: 100%;
+    padding: 9px 11px;
+    border: 1px solid #aebfd0;
+    border-radius: 7px;
+    background: #fff;
+    color: #172f49;
+    font: inherit;
+}
+#fieldFilter { width: 100%; max-width: 500px; }
+input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-visible, .save-errors:focus-visible {
+    outline: 3px solid #52a9e5;
+    outline-offset: 2px;
+}
+input:disabled, textarea:disabled, select:disabled { background: #f2f5f8; color: #53677a; }
+
+button {
+    min-height: 36px;
+    padding: 7px 13px;
+    border: 1px solid #b7c9dc;
+    border-radius: 7px;
+    background: #fff;
+    color: #07538d;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+button:hover:not(:disabled) { border-color: #0874c1; background: #eef7ff; }
+button:disabled { background: #f1f4f7; border-color: #d7dfe7; color: #607387; cursor: not-allowed; }
+.button-primary { border-color: #086bb4; background: #086bb4; color: #fff; }
+.button-primary:hover:not(:disabled) { border-color: #05558e; background: #05558e; }
+.edit-actions { margin: 20px 0 0; }
+.action-buttons, .review-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.edit-hint { margin: 9px 0 0; color: #526a80; font-size: 12px; }
+
+.save-errors { margin: 18px 0; padding: 14px 16px; border: 1px solid #e9aaa5; border-left: 4px solid #ba0517; border-radius: 8px; background: #fff3f1; color: #8e030f; overflow-wrap: anywhere; }
+.save-errors ul { margin: 8px 0; padding-left: 22px; white-space: pre-wrap; }
+.save-errors p { margin: 8px 0 0; }
+#reviewPanel { margin: 20px 0; padding: 20px; border: 1px solid #e7cd89; border-radius: 10px; background: #fffbef; }
+#reviewPanel h2 { margin: 0; color: #684500; font-size: 18px; }
+#reviewPanel p { margin: 8px 0; }
+.review-actions { margin-top: 14px; }
+#editStatus { margin: 14px 0; color: #075b53; font-weight: 600; }
+#editStatus:empty { display: none; }
+#editStatus.error, .field-editor .field-error { color: #a30518; }
+
+.field-editor { display: grid; gap: 6px; min-width: 180px; }
+.field-editor input:not([type="checkbox"]), .field-editor textarea, .field-editor select { width: 100%; }
+.field-editor label { font-weight: 600; margin: 0; }
+.field-editor small { color: #526a80; }
+.field-editor .edit-controls { display: flex; flex-wrap: wrap; gap: 6px; }
+.pending-label { display: table; margin-top: 6px; padding: 2px 8px; border-radius: 999px; background: #fff0c2; color: #704b00; font-size: 12px; font-weight: 700; }
+
+.table-container { overflow-x: auto; border: 1px solid #d9e3ed; border-radius: 9px; }
+.field-table-container { margin-top: 22px; }
+.field-table-container:has(table[hidden]) { display: none; }
+table { border-collapse: collapse; width: 100%; min-width: 630px; background: #fff; }
+th, td { padding: 12px 14px; border-bottom: 1px solid #e5edf4; text-align: left; vertical-align: top; }
+th { background: #edf5fc; color: #244b70; font-size: 12px; font-weight: 700; }
+td { overflow-wrap: anywhere; white-space: pre-wrap; }
+tbody tr:nth-child(even) { background: #f8fbfe; }
+tbody tr:hover { background: #f0f8ff; }
+tbody tr:last-child td { border-bottom: 0; }
+#fieldTable td:nth-child(1), #fieldTable td:nth-child(2) { width: 24%; }
+#fieldTable td:nth-child(2) { color: #486781; font-family: Consolas, monospace; font-size: 12px; }
+#fieldTable td:last-child { white-space: nowrap; color: #526a80; }
+
+@media (max-width: 600px) {
+    main { margin: 12px auto; padding: 0 12px 20px; }
+    .page-header, .workspace { padding-left: 18px; padding-right: 18px; }
+    .page-header { padding-top: 20px; }
+    .page-brand { margin-bottom: 18px; }
+    h1 { font-size: 25px; }
+    .workspace { padding-top: 22px; }
+    .workspace-heading { align-items: flex-start; }
+}

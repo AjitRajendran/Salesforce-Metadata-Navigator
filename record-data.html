@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Show All Data - Salesforce Metadata Navigator</title>
+  <link rel="stylesheet" href="record-data.css">
+</head>
+<body>
+  <main>
+    <header class="page-header">
+      <div class="page-brand">
+        <img src="icons/48.png" width="36" height="36" alt="">
+        <span>Salesforce Metadata Navigator</span>
+      </div>
+      <p class="page-eyebrow">Record explorer</p>
+      <h1>Show All Data</h1>
+      <p id="recordDetails" class="record-details"></p>
+      <p class="header-description">Explore the fields and values Salesforce returns for this record. Fields not accessible to your user are not shown.</p>
+    </header>
+    <section class="workspace" aria-label="Record fields">
+      <div class="workspace-heading">
+        <div>
+          <p class="section-eyebrow">Current record</p>
+          <h2>Fields &amp; values</h2>
+        </div>
+        <p id="status" class="field-count" role="status" aria-live="polite">Loading record data...</p>
+      </div>
+      <div class="filter-group">
+        <label for="fieldFilter">Filter by field label, API name, or value</label>
+        <input id="fieldFilter" type="search" autocomplete="off" placeholder="Filter fields" disabled>
+      </div>
+      <div id="editActions" class="edit-actions" hidden>
+        <div class="action-buttons">
+          <button type="button" id="editAllFields" class="button-primary">Edit</button>
+          <button type="button" id="saveAllFields" class="button-primary" hidden>Save</button>
+          <button type="button" id="cancelAllFields" hidden>Cancel editing</button>
+          <button type="button" id="reviewChanges" disabled>Review changes (0)</button>
+          <button type="button" id="discardChanges" disabled>Discard changes</button>
+        </div>
+        <p class="edit-hint">Only Salesforce-editable fields with supported value types can be changed.</p>
+      </div>
+      <div id="saveErrors" class="save-errors" role="alert" tabindex="-1" hidden>
+        <strong>Salesforce could not save this record</strong>
+        <ul id="saveErrorList"></ul>
+        <p>Your changes are still staged. Correct the values and try again.</p>
+      </div>
+      <section id="reviewPanel" hidden aria-labelledby="reviewHeading">
+        <h2 id="reviewHeading">Review changes</h2>
+        <p>Saving updates this Salesforce record and may trigger validation rules, flows, and other automation.</p>
+        <p id="conflictNotice"></p>
+        <div class="table-container">
+          <table>
+            <thead><tr><th>Field</th><th>Current value</th><th>New value</th></tr></thead>
+            <tbody id="reviewRows"></tbody>
+          </table>
+        </div>
+        <div class="review-actions">
+          <button type="button" id="saveChanges" class="button-primary">Save changes to Salesforce</button>
+          <button type="button" id="backToFields">Back to fields</button>
+        </div>
+      </section>
+      <p id="editStatus" role="status" aria-live="polite"></p>
+      <div class="table-container field-table-container">
+        <table id="fieldTable" hidden>
+          <thead><tr><th>Field label</th><th>API name</th><th>Value</th><th>Action</th></tr></thead>
+          <tbody id="fieldRows"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+  <script src="record-page-api-rules.js"></script>
+  <script src="record-edit-rules.js"></script>
+  <script src="record-data.js"></script>
+</body>
+</html>

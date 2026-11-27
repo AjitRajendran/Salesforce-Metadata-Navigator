@@ -1,31 +1,25 @@
 {
   "manifest_version": 3,
   "name": "Salesforce Metadata Navigator",
-  "version": "1.0.3",
-  "description": "Advanced toolkit for Admins: Formula Beautifier, Field Finder, Search Validation rules, Flow Manager and Export List views",
+  "version": "1.1.20",
+  "description": "Salesforce Metadata Navigator for Admins: Formula styler, Field Finder, Validation Rule search, Flow Manager, and List View export.",
+  "author": "Ajit Rajendran",
   "permissions": [
-    "cookies",
-    "activeTab"
+	"storage",
+	"activeTab",
+    "scripting"
   ],
-  "host_permissions": [
+  "optional_permissions": [
+    "cookies"
+  ],
+  "optional_host_permissions": [
     "https://*.salesforce.com/*",
-    "https://*.force.com/*",
     "https://*.my.salesforce.com/*",
     "https://*.my.salesforce-setup.com/*",
-	"https://*.builder.salesforce-experience.com/*",
-	"https://*.cloudforce.com/*",
-	"https://*.cloudforce.mil/*",
-	"https://*.crmforce.mil/*",
-	"https://*.force.com.mcas.ms/*",
-	"https://*.force.mil/*",
-	"https://*.salesforce.com/*",
-	"https://*.salesforce.mil/*",
-	"https://*.sfcrmapps.cn/*",
-	"https://*.sfcrmproducts.cn/*",
-	"https://*.visualforce.com/*",
-	"https://*.visualforce.mil/*"
+    "https://*.force.com/*",
+    "https://*.visualforce.com/*"
   ],
-   "action": {
+  "action": {
     "default_popup": "popup.html",
     "default_icon": {
       "16": "icons/16.png",
