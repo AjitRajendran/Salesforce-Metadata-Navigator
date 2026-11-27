@@ -1,0 +1,12 @@
+{
+  "name": "salesforce-metadata-navigator",
+  "private": true,
+  "devDependencies": {
+    "@playwright/test": "^1.60.0"
+  },
+  "scripts": {
+    "test": "node --test",
+    "test:browser": "node ./node_modules/playwright/cli.js test --reporter=line",
+    "test:all": "npm run test ; npm run test:browser"
+  }
+}
